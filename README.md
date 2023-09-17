@@ -45,6 +45,40 @@ mv .env.example .env
 cargo install diesel_cli --no-default-features --features postgres
 ```
 
+### Create migration SQL
+
+```bash
+diesel migration generate {TABLE_NAME}
+```
+You will see the output of two entry files inside migrations/** folder.
+then edit up.sql(replace with your table struct):
+
+```sql
+CREATE TABLE tweets
+(
+    id         SERIAL       NOT NULL PRIMARY KEY,
+    message    VARCHAR(140) NOT NULL,
+    created_at TIMESTAMP    NOT NULL
+)
+```
+and then run:
+
+```bash
+diesel migration run
+```
+
+It generated a new file into src/schema.rs and then update down.sql with the following code(replace with your table name):
+
+```sql
+DROP TABLE tweets;
+```
+
+We can now roll back our migration correctly by redoing:
+
+```bash
+diesel generate redo
+```
+
 [More details](https://0xchai.io/blog/restful-api-with-actix#setup-diesel)
 
 ## Documents
