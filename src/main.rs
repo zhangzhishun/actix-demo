@@ -1,25 +1,20 @@
 #[macro_use]
 extern crate diesel;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware};
+use actix_web::{App, HttpResponse, HttpServer, middleware, Responder, web};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
 // We define a custom type for connection pool to use later.
 pub type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
+mod handlers;
+mod models;
+mod schema;
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
 
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
+async fn health() -> impl Responder {
+    HttpResponse::Ok().body("Health!")
 }
 
 #[actix_web::main]
@@ -40,9 +35,12 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(pool.clone()))
             .wrap(middleware::Logger::default())
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
+            .route("/", web::get().to(health))
+            .service(handlers::create)
+            .service(handlers::index)
+            .service(handlers::destroy)
+            .service(handlers::show)
+            .service(handlers::update)
     })
         .bind(("127.0.0.1", 8080))?
         .run()
