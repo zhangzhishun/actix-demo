@@ -50,8 +50,9 @@ cargo install diesel_cli --no-default-features --features postgres
 ```bash
 diesel migration generate {TABLE_NAME}
 ```
-You will see the output of two entry files inside migrations/** folder.
-then edit up.sql(replace with your table struct):
+You will see the output of two entry files inside `migrations/**` folder.
+
+then edit `up.sql`(replace with your table struct):
 
 ```sql
 CREATE TABLE tweets
@@ -67,7 +68,7 @@ and then run:
 diesel migration run
 ```
 
-It generated a new file into src/schema.rs and then update down.sql with the following code(replace with your table name):
+It generated a new file into `src/schema.rs` and then update `down.sql` with the following code(replace with your table name):
 
 ```sql
 DROP TABLE tweets;
