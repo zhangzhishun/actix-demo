@@ -82,6 +82,6 @@ diesel generate redo
 
 [More details](https://0xchai.io/blog/restful-api-with-actix#setup-diesel)
 
-## Documents
+## Reference
 
 - [Learn Rust by building a RESTFul API with Actix](https://0xchai.io/blog/restful-api-with-actix)
